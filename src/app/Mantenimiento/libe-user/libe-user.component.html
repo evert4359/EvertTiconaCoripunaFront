@@ -1,0 +1,167 @@
+<section class="content" style="padding-top: 15px;">
+  <div class="container-fluid">
+    <div class="card card-primary">
+      <div class="card-header" style="height: 52px;">
+        <h3 class="card-title">Mantenimiento Live User</h3>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="formFiltroLiveUser">
+          <div class="form-row">
+            <div class="form-group">
+              <button type="button" class="btn-primary btn-sm" data-toggle="modal"
+              data-target="#libeUserModal" style="margin-right: 3px;" (click)="openModalLiveUser()">Nuevo</button>
+            </div>
+          </div>
+          <div class="form-row">
+
+            <div class="col-md-3">
+              <label for="exampleFormControlInput1" style="margin-bottom: 2px;font-size: 12px;">NroDocumento</label>
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="documentoNumber" name="documentoNumber" formControlName="documentoNumber"
+                autocomplete="off">
+                <div class="input-group-prepend">
+                  <button type="button" class="btn btn-info" (click)="listaLibeUser()">Buscar</button>
+                </div>
+              </div>
+           </div>
+
+          </div>
+        </form>
+        <div class="box-body table-responsive no-padding">
+          <table class="table table-hover">
+            <thead  style="background-color:#343a40;color: #ffff;">
+              <tr>
+                  <th>documentNumber</th>
+                  <th>documentTypeId</th>
+                  <th>Email</th>
+                  <th>FathersLastName</th>
+                  <th>MothersLastName</th>
+                  <th>Name</th>
+                  <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of listLiveUser">
+                <td>{{item.documentNumber}}</td>
+                <td>{{item.documentTypeId}}</td>
+                <td>{{item.email}}</td>
+                <td>{{item.fathersLastName}}</td>
+                <td>{{item.mothersLastName}}</td>
+                <td>{{item.name}}</td>
+                <td>
+                  <button type="button" class="btn-primary btn-sm" style="padding: 0.1rem 0.3rem; font-size: 0.6rem;"
+                  (click)="editar(item)">...</button> |
+                  <button type="button" class="btn-danger btn-sm" style="padding: 0.1rem 0.3rem; font-size: 0.6rem;"
+                  (click)="eliminarFila(item.documentNumber)">x</button>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+
+<!-- Modal registro -->
+ <div class="modal fade" id="libeUserModal" tabindex="-1" role="dialog" aria-labelledby="libeUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{titulo}}</h5>
+        <button type="button" class="close" data-dismiss="modal" (click)="cerrar()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formLiveUser">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="documentTypeId">Document Type</label>
+              <select class="form-control" id="documentTypeId" name="documentTypeId" formControlName="documentTypeId">
+                <option value="0">[Seleccione]</option>
+                <option *ngFor="let item of listDocumentType" [value]="item.documentTypeId">{{item.documentTypeDescription}}</option>
+              </select>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="documentNumber">DocumentNumber</label>
+              <input type="text" class="form-control" id="documentoNumero" name="documentoNumero" formControlName="documentoNumero" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name" name="name" formControlName="name" autocomplete="off">
+            </div>
+            <div class="form-group col-md-12">
+              <label for="fathersLastName">Fathers Last Name</label>
+              <input type="text" class="form-control" id="fathersLastName" name="fathersLastName" formControlName="fathersLastName" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="mothersLastName">Mothers Last Name</label>
+              <input type="text" class="form-control" id="mothersLastName" name="mothersLastName" formControlName="mothersLastName" autocomplete="off">
+            </div>
+            <div class="form-group col-md-12">
+              <label for="address">Address</label>
+              <input type="text" class="form-control" id="address" name="address" formControlName="address" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="regionCode">Departamento</label>
+              <select class="form-control" id="regionCode" name="regionCode" formControlName="regionCode"
+              (change)="ListProvinces($event)">
+                <option value="0">[Seleccione]</option>
+                <option *ngFor="let item of listRegion" [value]="item.regionCode">{{item.regionDescription}}</option>
+              </select>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="provinceCode">Provincia</label>
+              <select class="form-control" id="provinceCode" name="provinceCode" formControlName="provinceCode"
+              (change)="ListUbigeos($event)">
+                <option value="0">[Seleccione]</option>
+                <option *ngFor="let item of listProvince" [value]="item.provinceCode">{{item.provinceDescription}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="ubigeoCode">Distrito</label>
+              <select class="form-control" id="ubigeoCode" name="ubigeoCode" formControlName="ubigeoCode">
+                <option value="0">[Seleccione]</option>
+                <option *ngFor="let item of listUbigeo" [value]="item.ubigeoCode">{{item.ubigeoDescription}}</option>
+              </select>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="phone">Telefono</label>
+              <input type="text" class="form-control" id="phone" name="phone" formControlName="phone" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="email">Correo</label>
+              <input type="text" class="form-control" id="email" name="email" formControlName="email" autocomplete="off">
+            </div>
+            <div class="form-group col-md-12">
+              <label for="password">Contraseña</label>
+              <input type="text" class="form-control" id="password" name="password" formControlName="password" autocomplete="off">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="cerrar()">Cerrar</button>
+        <button type="button" class="btn btn-primary btn-sm" *ngIf="booleanButtonGuardar"(click)="createLiveUser()">Save</button>
+        <button type="button" class="btn btn-primary btn-sm" *ngIf="booleanButtonActualizar"(click)="updateLiveUser()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
